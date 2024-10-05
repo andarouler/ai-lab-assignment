@@ -19,7 +19,7 @@ class WeatherDataset(Dataset):
                     if img_file.endswith(('.png')):  # Füge die passenden Bildformate hinzu
                         self.image_paths.append(os.path.join(full_dir, img_file))
                         self.labels.append(label)  # 0 für rainy, 1 für sunny
-                        print(f"Image-file: {img_file}, label: {label}, path: {full_dir}")
+                        #print(f"Image-file: {img_file}, label: {label}, path: {full_dir}")
 
         print(f"Image count: {len(self.image_paths)}")
 
@@ -52,7 +52,7 @@ class ArtStyleDataset(Dataset):
                     if img_file.endswith(('.png')):  # Füge die passenden Bildformate hinzu
                         self.image_paths.append(os.path.join(full_dir, img_file))
                         self.labels.append(label)  # 0 für rainy, 1 für sunny
-                        print(f"Image-file: {img_file}, label: {label}, path: {full_dir}")
+                        #print(f"Image-file: {img_file}, label: {label}, path: {full_dir}")
 
         print(f"Image count: {len(self.image_paths)}")
     

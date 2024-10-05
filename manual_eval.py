@@ -7,7 +7,7 @@ from simple_cnn import SimpleCNN
 
 # Modell initialisieren
 model = SimpleCNN()
-model.load_state_dict(torch.load('model/rainy_sunny_classifier.pth'))
+model.load_state_dict(torch.load('model/artistic_realistic_classifier.pth'))
 model.eval()  # Setze das Modell in den Evaluierungsmodus
 
 
@@ -18,7 +18,7 @@ transform = transforms.Compose([
 ])
 
 # Lade ein Bild
-image_path = '../dataset/test/realistic_sunny/image_08.png'
+image_path = '../dataset/test/artistic_sunny/image_08.png'
 image = Image.open(image_path)
 
 # Wende die Transformationen an
@@ -39,6 +39,6 @@ with torch.no_grad():  # Verhindert, dass Gradient-Informationen gesammelt werde
 
 # Die Vorhersage anzeigen
 if predicted.item() == 0:
-    print("Vorhersage: Rainy")
+    print("Vorhersage: Artistic/Rainy")
 else:
-    print("Vorhersage: Sunny")
+    print("Vorhersage: Realistic/Sunny")

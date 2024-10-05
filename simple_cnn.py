@@ -26,7 +26,7 @@ class SimpleCNN(nn.Module):
             x = F.relu(self.conv2(x))
             x = F.max_pool2d(x, 2)
             self.conv_output_size = x.numel()  # Anzahl der Elemente nach den Convolution Layers
-            print(f"Size of output after conv layers: {self.conv_output_size}")
+            #print(f"Size of output after conv layers: {self.conv_output_size}")
 
     def forward(self, x):
         x = F.relu(self.conv1(x))
