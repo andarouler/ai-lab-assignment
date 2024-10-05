@@ -1,3 +1,5 @@
+# simple_cnn.py
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -8,7 +10,6 @@ class SimpleCNN(nn.Module):
         self.conv1 = nn.Conv2d(3, 32, 3, 1)  # Eingabekanal 3 (RGB), Ausgabe 32 Filter
         self.conv2 = nn.Conv2d(32, 64, 3, 1)  # Eingabe 32 Filter, Ausgabe 64 Filter
         
-        # TODO noch nötig?
         # Dummy input durchlaufen lassen, um die Größe der Ausgabedaten nach den Conv-Schichten zu berechnen
         self._calculate_conv_output()
 
@@ -25,7 +26,7 @@ class SimpleCNN(nn.Module):
             x = F.relu(self.conv2(x))
             x = F.max_pool2d(x, 2)
             self.conv_output_size = x.numel()  # Anzahl der Elemente nach den Convolution Layers
-            print(f"size of output after conv layers: {self.conv_output_size}")
+            print(f"Size of output after conv layers: {self.conv_output_size}")
 
     def forward(self, x):
         x = F.relu(self.conv1(x))

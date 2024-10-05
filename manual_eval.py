@@ -18,7 +18,7 @@ transform = transforms.Compose([
 ])
 
 # Lade ein Bild
-image_path = '../dataset/test/realistic_rainy/image_08.png'
+image_path = '../dataset/test/realistic_sunny/image_08.png'
 image = Image.open(image_path)
 
 # Wende die Transformationen an

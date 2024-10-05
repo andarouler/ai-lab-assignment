@@ -1,3 +1,5 @@
+# model_training.py
+
 import torch
 import torch.nn as nn
 
@@ -6,6 +8,7 @@ from torchvision import datasets, transforms
 from torch.utils.data import DataLoader
 
 from simple_cnn import SimpleCNN
+from datasets import WeatherDataset
 
 def get_dataloaders(train_dir, test_dir, batch_size=32):
     # Transformationen für die Bilder
@@ -15,8 +18,11 @@ def get_dataloaders(train_dir, test_dir, batch_size=32):
     ])
 
     # Erstellen des Datasets
-    train_dataset = datasets.ImageFolder(root=train_dir, transform=transform)
-    test_dataset = datasets.ImageFolder(root=test_dir, transform=transform)
+    # train_dataset = datasets.ImageFolder(root=train_dir, transform=transform)
+    # test_dataset = datasets.ImageFolder(root=test_dir, transform=transform)
+
+    train_dataset = WeatherDataset(root_dir=train_dir, transform=transform)
+    test_dataset = WeatherDataset(root_dir=test_dir, transform=transform)
 
     # Erstellen des DataLoaders
     train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
