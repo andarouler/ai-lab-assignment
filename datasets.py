@@ -9,6 +9,7 @@ class WeatherDataset(Dataset):
         self.transform = transform
         self.image_paths = []
         self.labels = []
+        self.classes = ['rainy', 'sunny']
         
         # Lade die Bilder aus den entsprechenden Verzeichnissen und setze Labels
         for label, subdir in enumerate(['rainy', 'sunny']):  # 0 für rainy, 1 für sunny
@@ -42,9 +43,10 @@ class ArtStyleDataset(Dataset):
         self.transform = transform
         self.image_paths = []
         self.labels = []
+        self.classes = ['artistic', 'realistic']  
         
         # Lade die Bilder aus den entsprechenden Verzeichnissen und setze Labels
-        for label, subdir in enumerate(['artistic', 'realistic']):  # 0 für rainy, 1 für sunny
+        for label, subdir in enumerate(['artistic', 'realistic']): # 0 für artistic, 1 für realistic
             # Pfade für beide rainy und sunny Typen (artistic & realistic)
             for weather_type in ['rainy', 'sunny']:
                 full_dir = os.path.join(root_dir, f"{subdir}_{weather_type}")

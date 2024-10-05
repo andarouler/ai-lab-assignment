@@ -1,44 +1,60 @@
 import torch
 from PIL import Image
 import torchvision.transforms as transforms
-import torch
 
 from simple_cnn import SimpleCNN
 
-# Modell initialisieren
-model = SimpleCNN()
-model.load_state_dict(torch.load('model/artistic_realistic_classifier.pth'))
-model.eval()  # Setze das Modell in den Evaluierungsmodus
+# Modell und Labels laden
+def load_model_with_labels(model_path):
+    model_info = torch.load(model_path)
+    
+    model = SimpleCNN()
+    model.load_state_dict(model_info['model_state_dict'])
+
+    class_labels = model_info['class_labels']  # Lade die gespeicherten Labels
+    
+    return model, class_labels
+
+def evaluate_single_image(model, image_path, class_labels):
+    transform = transforms.Compose([
+        transforms.Resize((128, 128)),
+        transforms.ToTensor()
+    ])
+
+    image = Image.open(image_path).convert("RGB")
+    image = transform(image).unsqueeze(0)  # Batch-Dimension hinzufügen
+
+    model.eval()
+    with torch.no_grad():
+        output = model(image)
+        _, predicted = torch.max(output, 1)
+
+    predicted_class = class_labels[predicted.item()]
+    print(f"Vorhersage: {predicted_class}\n")
+
+def test_evaluate(model_name, image_path):
+    print(f"testing {model_name}")
+    model, class_labels = load_model_with_labels(f'model/{model_name}.pth')
+    print(f"Geladene Labels: {class_labels}")
+    print(f"Testing with image: {image_path}")
+    evaluate_single_image(model, image_path, class_labels)
 
 
-# Transformationen für das Bild (wie beim Training)
-transform = transforms.Compose([
-    transforms.Resize((128, 128)),
-    transforms.ToTensor()
-])
 
-# Lade ein Bild
-image_path = '../dataset/test/artistic_sunny/image_08.png'
-image = Image.open(image_path)
+# Vorhersage für ein einzelnes Bild - weather
+test_evaluate("rainy_sunny_classifier", "../dataset/test/artistic_sunny/image_08.png")
 
-# Wende die Transformationen an
-image = transform(image)
+test_evaluate("rainy_sunny_classifier", "../dataset/test/artistic_rainy/image_08.png")
 
-# Bild ins richtige Format bringen (Batch-Dimension hinzufügen)
-image = image.unsqueeze(0)  # Fügt eine Batch-Dimension hinzu: [1, Channels, Height, Width]
+test_evaluate("rainy_sunny_classifier", "../dataset/test/realistic_sunny/image_41.png")
 
-# Modell in den Evaluierungsmodus versetzen (falls noch nicht geschehen)
-model.eval()
+test_evaluate("rainy_sunny_classifier", "../dataset/test/realistic_rainy/image_41.png")
 
-# Mache die Vorhersage
-with torch.no_grad():  # Verhindert, dass Gradient-Informationen gesammelt werden (spart Speicher)
-    output = model(image)
-    print(f"output {output}")
-    _, predicted = torch.max(output, 1)  # Nimmt die Klasse mit dem höchsten Wert
-    print(f"predicted {predicted}")
+# Vorhersage für ein einzelnes Bild - artstyle
+test_evaluate("artistic_realistic_classifier", "../dataset/test/realistic_sunny/image_08.png")
 
-# Die Vorhersage anzeigen
-if predicted.item() == 0:
-    print("Vorhersage: Artistic/Rainy")
-else:
-    print("Vorhersage: Realistic/Sunny")
+test_evaluate("artistic_realistic_classifier", "../dataset/test/realistic_rainy/image_08.png")
+
+test_evaluate("artistic_realistic_classifier", "../dataset/test/artistic_sunny/image_41.png")
+
+test_evaluate("artistic_realistic_classifier", "../dataset/test/artistic_rainy/image_41.png")
