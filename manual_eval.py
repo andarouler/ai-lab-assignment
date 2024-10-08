@@ -58,3 +58,5 @@ test_evaluate("artistic_realistic_classifier", "../dataset/test/realistic_rainy/
 test_evaluate("artistic_realistic_classifier", "../dataset/test/artistic_sunny/image_41.png")
 
 test_evaluate("artistic_realistic_classifier", "../dataset/test/artistic_rainy/image_41.png")
+
+test_evaluate("artistic_realistic_classifier", "../dataset/test/artistic_rainy/image_12.png")

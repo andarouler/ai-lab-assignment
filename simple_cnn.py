@@ -7,9 +7,12 @@ import torch.nn.functional as F
 class SimpleCNN(nn.Module):
     def __init__(self):
         super(SimpleCNN, self).__init__()
-        self.conv1 = nn.Conv2d(3, 32, 3, 1)  # Eingabekanal 3 (RGB), Ausgabe 32 Filter
-        self.conv2 = nn.Conv2d(32, 64, 3, 1)  # Eingabe 32 Filter, Ausgabe 64 Filter
+        self.conv1 = nn.Conv2d(3, 16, 3, 1)  # Eingabekanal 3 (RGB), Ausgabe 16 Filter
+        self.conv2 = nn.Conv2d(16, 32, 3, 1)  # Eingabe 16 Filter, Ausgabe 32 Filter
         
+        # Dropout Schicht um overfitting vorzubeugen
+        self.dropout = nn.Dropout(0.5) # 50% der Neuronen werden zufällig deaktiviert
+
         # Dummy input durchlaufen lassen, um die Größe der Ausgabedaten nach den Conv-Schichten zu berechnen
         self._calculate_conv_output()
 

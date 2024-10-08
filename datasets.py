@@ -1,3 +1,5 @@
+# datasets.py
+
 from torch.utils.data import Dataset
 from torchvision import transforms
 from PIL import Image
@@ -13,7 +15,7 @@ class WeatherDataset(Dataset):
         
         # Lade die Bilder aus den entsprechenden Verzeichnissen und setze Labels
         for label, subdir in enumerate(['rainy', 'sunny']):  # 0 für rainy, 1 für sunny
-            # Pfade für beide rainy und sunny Typen (artistic & realistic)
+            # Pfade für rainy und sunny Bilder (artistic & realistic)
             for art_style in ['artistic', 'realistic']:
                 full_dir = os.path.join(root_dir, f"{art_style}_{subdir}")
                 for img_file in os.listdir(full_dir):
@@ -47,13 +49,13 @@ class ArtStyleDataset(Dataset):
         
         # Lade die Bilder aus den entsprechenden Verzeichnissen und setze Labels
         for label, subdir in enumerate(['artistic', 'realistic']): # 0 für artistic, 1 für realistic
-            # Pfade für beide rainy und sunny Typen (artistic & realistic)
+            # Pfade für artistic und realistic Bilder (rainy & sunny)
             for weather_type in ['rainy', 'sunny']:
                 full_dir = os.path.join(root_dir, f"{subdir}_{weather_type}")
                 for img_file in os.listdir(full_dir):
                     if img_file.endswith(('.png')):  # Füge die passenden Bildformate hinzu
                         self.image_paths.append(os.path.join(full_dir, img_file))
-                        self.labels.append(label)  # 0 für rainy, 1 für sunny
+                        self.labels.append(label)  # 0 für artistic, 1 für realistic
                         #print(f"Image-file: {img_file}, label: {label}, path: {full_dir}")
 
         print(f"Image count: {len(self.image_paths)}")

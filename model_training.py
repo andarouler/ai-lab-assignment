@@ -4,28 +4,33 @@ import torch
 import torch.nn as nn
 
 from torch.optim import Adam
-from torchvision import datasets, transforms
+from torchvision import transforms
 from torch.utils.data import DataLoader
 
 from simple_cnn import SimpleCNN
 from datasets import WeatherDataset, ArtStyleDataset
 
 def get_dataloaders(classifier_type, train_dir, test_dir, batch_size=32):
-    # Transformationen für die Bilder
+    
+    # Transformationen der Bilder und
+    # Data Augmentation
     transform = transforms.Compose([
-        transforms.Resize((128, 128)),
-        transforms.ToTensor()
+        transforms.RandomResizedCrop(128),
+        transforms.RandomHorizontalFlip(),
+        transforms.RandomRotation(30),
+        transforms.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2),
+        transforms.ToTensor(),  
     ])
 
     if classifier_type == 'weather':
-        # dataset for weather
+        # Dataset für weather
         print("Loading weather training dataset")
         train_dataset = WeatherDataset(root_dir=train_dir, transform=transform)
         print("Loading weather test dataset")
         test_dataset = WeatherDataset(root_dir=test_dir, transform=transform)
 
     elif classifier_type == 'artstyle':
-        # Dataset for art style ( realistic vs. artistic)
+        # Dataset für art style ( realistic vs. artistic)
         print("Loading artstyle training dataset")
         train_dataset = ArtStyleDataset(root_dir=train_dir, transform=transform)
         print("Loading artstyle test datatset")
@@ -76,7 +81,7 @@ def test_model(model, test_loader, criterion, device):
 def train_and_evaluate(classifier_type, model_name, num_epochs=10, batch_size=32):
     print(f"Training classifier for: {classifier_type}")
 
-    # Hauptlogik für das Training
+    # Prüfe ob cude (gpu) verfügbar
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f"Using {device} device for training")
 
@@ -95,7 +100,6 @@ def train_and_evaluate(classifier_type, model_name, num_epochs=10, batch_size=32
     else:
         print(f"No class labels found for {classifier_type}")
 
-    # num_epochs = 10
     for epoch in range(num_epochs):
         train_loss = train_model(model, train_loader, criterion, optimizer, device)
         test_loss, test_accuracy = test_model(model, test_loader, criterion, device)
@@ -113,14 +117,14 @@ def train_and_evaluate(classifier_type, model_name, num_epochs=10, batch_size=32
     torch.save(model_info, f'model/{model_name}.pth')
     print("Finished!\n")
 
-train_and_evaluate(
-    classifier_type='weather',
-    model_name='rainy_sunny_classifier',
-    num_epochs=10
-)
+# train_and_evaluate(
+#     classifier_type='weather',
+#     model_name='rainy_sunny_classifier',
+#     num_epochs=9
+# )
 
 train_and_evaluate(
     classifier_type='artstyle',
     model_name='artistic_realistic_classifier',
-    num_epochs=10
+    num_epochs=9
 )
